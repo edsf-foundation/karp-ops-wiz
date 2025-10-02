@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { ConfigWizard } from '@/components/ConfigWizard'
 import { CostDashboard } from '@/components/CostDashboard'
-import { RebalancingView } from '@/components/RebalancingView'
+import { RebalancerView } from '@/components/RebalancerView'
 import { Settings } from '@/components/Settings'
 import './App.css'
 
@@ -44,7 +43,7 @@ function App() {
           </TabsContent>
 
           <TabsContent value="rebalancing" className="space-y-6">
-            <RebalancingView />
+            <RebalancerView />
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-6">
