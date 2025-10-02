@@ -7,7 +7,6 @@ require (
 	k8s.io/apimachinery v0.28.4
 	k8s.io/client-go v0.28.4
 	github.com/gin-gonic/gin v1.9.1
-	github.com/cenkalti/netlink v1.2.1
 	github.com/spf13/cobra v1.7.0
 )
 
