@@ -14,11 +14,12 @@ RUN npm run build
 FROM golang:1.21-alpine AS backend-build
 WORKDIR /app
 RUN apk add --no-cache ca-certificates git
-# Copy only go.mod first to leverage layer caching (no go.sum in repo yet)
+# Copy module files and download deps to produce go.sum
 COPY go.mod ./
-RUN go mod download
-# Copy backend sources and build
+RUN go mod download || true
+# Copy backend sources and tidy modules (generates go.sum inside container)
 COPY backend/ ./backend
+RUN cd backend && go mod tidy || true
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /main ./backend
 
 # Final stage

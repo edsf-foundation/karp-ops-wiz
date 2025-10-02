@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/karpops-wiz/karp-ops-wiz/backend/k8s"
+	"github.com/edsf-foundation/karp-ops-wiz/backend/k8s"
 )
 
 type Service struct {
