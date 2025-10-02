@@ -57,7 +57,7 @@ func (c *K8sClient) GetNodes(ctx context.Context) (*NodeInfo, error) {
 		return nil, fmt.Errorf("failed to list nodes: %w", err)
 	}
 
-	var totalCPU, totalMemory int64
+    var totalCPUMilli, totalMemoryBytes int64
 	var spotNodes, onDemandNodes int
 	nodeDetails := []NodeDetails{}
 
@@ -71,20 +71,18 @@ func (c *K8sClient) GetNodes(ctx context.Context) (*NodeInfo, error) {
 			State:     string(node.Status.Conditions[0].Type),
 		}
 
-		// Extract CPU and memory from resources
-		if cpu, ok := node.Status.Capacity["cpu"]; ok {
-			if cpuMilli, err := cpu.AsInt64(); err == nil {
-				totalCPU += cpuMilli
-				nodeDetail.CPUCores = cpuMilli / 1000
-			}
-		}
+        // Extract CPU (milli) and memory (bytes) from resources
+        if cpuQ, ok := node.Status.Capacity["cpu"]; ok {
+            cpuMilli := cpuQ.MilliValue()
+            totalCPUMilli += cpuMilli
+            nodeDetail.CPUCores = cpuQ.Value()
+        }
 
-		if memory, ok := node.Status.Capacity["memory"]; ok {
-			if memoryBytes, err := memory.AsInt64(); err == nil {
-				totalMemory += memoryBytes
-				nodeDetail.MemoryGB = memoryBytes / (1024 * 1024 * 1024)
-			}
-		}
+        if memQ, ok := node.Status.Capacity["memory"]; ok {
+            memoryBytes := memQ.Value()
+            totalMemoryBytes += memoryBytes
+            nodeDetail.MemoryGB = memoryBytes / (1024 * 1024 * 1024)
+        }
 
 		if nodeDetail.IsSpot {
 			spotNodes++
@@ -95,12 +93,12 @@ func (c *K8sClient) GetNodes(ctx context.Context) (*NodeInfo, error) {
 		nodeDetails = append(nodeDetails, nodeDetail)
 	}
 
-	return &NodeInfo{
+    return &NodeInfo{
 		TotalNodes:    len(nodes.Items),
 		SpotNodes:     spotNodes,
 		OnDemandNodes: onDemandNodes,
-		TotalCPU:      totalCPU / 1000, // Convert to cores
-		TotalMemory:   totalMemory,
+        TotalCPU:      totalCPUMilli / 1000, // cores
+        TotalMemory:   totalMemoryBytes,
 		Nodes:         nodeDetails,
 	}, nil
 }
@@ -111,7 +109,7 @@ func (c *K8sClient) GetPods(ctx context.Context) (*PodInfo, error) {
 		return nil, fmt.Errorf("failed to list pods: %w", err)
 	}
 
-	var totalCPU, totalMemory int64
+    var totalCPUMilli, totalMemoryBytes int64
 	podDetails := []PodDetails{}
 
 	for _, pod := range pods.Items {
@@ -122,33 +120,29 @@ func (c *K8sClient) GetPods(ctx context.Context) (*PodInfo, error) {
 			Status:    string(pod.Status.Phase),
 		}
 
-		// Calculate resource requests
-		var podCPU, podMemory int64
+        // Calculate resource requests (CPU in milli, memory in bytes)
+        var podCPUMilli, podMemoryBytes int64
 		for _, container := range pod.Spec.Containers {
-			if cpu, ok := container.Resources.Requests["cpu"]; ok {
-				if cpuMilli, err := cpu.AsInt64(); err == nil {
-					podCPU += cpuMilli
-				}
-			}
-			if memory, ok := container.Resources.Requests["memory"]; ok {
-				if memoryBytes, err := memory.AsInt64(); err == nil {
-					podMemory += memoryBytes
-				}
-			}
+            if cpuQ, ok := container.Resources.Requests["cpu"]; ok {
+                podCPUMilli += cpuQ.MilliValue()
+            }
+            if memQ, ok := container.Resources.Requests["memory"]; ok {
+                podMemoryBytes += memQ.Value()
+            }
 		}
 
-		podDetail.CPURequest = podCPU
-		podDetail.MemoryRequest = podMemory
-		totalCPU += podCPU
-		totalMemory += podMemory
+        podDetail.CPURequest = podCPUMilli
+        podDetail.MemoryRequest = podMemoryBytes
+        totalCPUMilli += podCPUMilli
+        totalMemoryBytes += podMemoryBytes
 
 		podDetails = append(podDetails, podDetail)
 	}
 
-	return &PodInfo{
+    return &PodInfo{
 		TotalPods:  len(pods.Items),
-		TotalCPU:   totalCPU,
-		TotalMemory: totalMemory,
+        TotalCPU:   totalCPUMilli,
+        TotalMemory: totalMemoryBytes,
 		Pods:       podDetails,
 	}, nil
 }

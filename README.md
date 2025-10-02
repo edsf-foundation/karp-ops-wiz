@@ -1,6 +1,6 @@
 # KarpOps-Wiz: Kubernetes Cost Optimization Tool
 
-An open-source MVP inspired by CAST AI, focused on Karpenter-based scaling and cost optimization.
+An open-source MVP, focused on Karpenter-based scaling and cost optimization.
 
 ## Features
 
