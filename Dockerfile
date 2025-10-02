@@ -10,12 +10,14 @@ RUN npm run build
 
 # Build backend
 FROM golang:1.21-alpine AS backend-build
-WORKDIR /backend
+WORKDIR /app
 RUN apk add --no-cache ca-certificates git
-COPY go.mod go.sum ./
+# Copy only go.mod first to leverage layer caching (no go.sum in repo yet)
+COPY go.mod ./
 RUN go mod download
-COPY backend/ . 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+# Copy backend sources and build
+COPY backend/ ./backend
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /main ./backend
 
 # Final stage
 FROM alpine:latest
@@ -23,7 +25,7 @@ RUN apk --no-cache add ca-certificates kubectl tzdata
 WORKDIR /root/
 
 # Copy backend binary
-COPY --from=backend-build /backend/main .
+COPY --from=backend-build /main .
 
 # Copy frontend build
 COPY --from=frontend-build /frontend/dist ./frontend/dist
