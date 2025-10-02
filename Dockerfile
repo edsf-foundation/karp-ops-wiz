@@ -4,7 +4,9 @@
 FROM node:18-alpine AS frontend-build
 WORKDIR /frontend
 COPY frontend/package*.json ./
-RUN npm ci --only=production
+# Install dependencies for build (dev deps required for Vite/TypeScript)
+# Fall back to npm install if package-lock.json is absent
+RUN npm ci || npm install
 COPY frontend/ .
 RUN npm run build
 
