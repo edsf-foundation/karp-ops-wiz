@@ -1,13 +1,11 @@
 package wizard
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"net/http"
+    "fmt"
+    "net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/edsf-foundation/karp-ops-wiz/backend/k8s"
+    "github.com/gin-gonic/gin"
+    "github.com/edsf-foundation/karp-ops-wiz/backend/k8s"
 )
 
 type Service struct {
@@ -52,10 +50,9 @@ type ProvisionerSpec struct {
 	ProviderRef                     ProviderRef `yaml:"providerRef"`
 	Requirements                    []Requirement `yaml:"requirements"`
 	ResourceLimits                 ResourceLimits `yaml:"resourceLimits"`
-	Taints                          []Taint       `yaml:"taints,omitempty"`
+    Taints                          []Taint       `yaml:"taints,omitempty"`
 	Labels                          map[string]string `yaml:"labels,omitempty"`
 	Weight                          int           `yaml:"weight"`
-	Taints                          []string      `yaml:"taints,omitempty"`
 	Consolidation                   Consolidation `yaml:"consolidation,omitempty"`
 	TTLSecondsAfterEmpty           *int          `yaml:"ttlSecondsAfterEmpty,omitempty"`
 	TTLSecondsUntilExpired         *int          `yaml:"ttlSecondsUntilExpired,omitempty"`
@@ -432,11 +429,11 @@ func (s *Service) HandleGetRebalancingRecommendations(c *gin.Context) {
 		return
 	}
 
-	podInfo, err := s.k8sClient.GetPods(ctx)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+    podInfo, err := s.k8sClient.GetPods(ctx)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
 
 	recommendations := s.generateRebalancingRecommendations(nodeInfo, podInfo)
 	c.JSON(http.StatusOK, recommendations)

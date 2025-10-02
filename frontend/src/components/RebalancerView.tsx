@@ -216,7 +216,7 @@ export function RebalancerView() {
 
               <div className="flex space-x-2">
                 <Button variant="outline">Export Recommendations</Button>
-                <Button onClick={() => window.location.href = '/#wizard')}>
+                <Button onClick={() => { window.location.href = '/#wizard' }}>
                   Generate Karpenter Config
                 </Button>
               </div>
