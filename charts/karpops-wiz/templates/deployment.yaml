@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karpops-wiz
+  labels:
+    {{- include "karpops-wiz.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "karpops-wiz.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "karpops-wiz.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "karpops-wiz.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: FEATURE_COST_DASHBOARD
+              value: "{{ .Values.features.costDashboard.enabled }}"
+            - name: FEATURE_REBALANCING  
+              value: "{{ .Values.features.rebalancing.enabled }}"
+            - name: FEATURE_PRICING_SIMULATION
+              value: "{{ .Values.features.pricingSimulation.enabled }}"
+            - name: FEATURE_KARPENTER_INTEGRATION
+              value: "{{ .Values.features.karpenterIntegration.enabled }}"
+            - name: PRICING_REFRESH_INTERVAL
+              value: "{{ .Values.config.pricingRefreshInterval }}"
+            - name: METRICS_REFRESH_INTERVAL
+              value: "{{ .Values.config.metricsRefreshInterval }}"
+            - name: DEFAULT_REGION
+              value: "{{ .Values.config.defaultRegion }}"
+            - name: AWS_ENABLED
+              value: "{{ .Values.aws.enabled }}"
+            {{- if .Values.aws.roleArn }}
+            - name: AWS_ROLE_ARN
+              value: "{{ .Values.aws.roleArn }}"
+            {{- end }}
+            - name: LOG_LEVEL
+              value: "{{ .Values.debug.logLevel }}"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health  
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+              readOnly: false
+            {{- if .Values.persistence.enabled }}
+            - name: cache-volume
+              mountPath: /cache
+              readOnly: false
+            {{- end }}
+      volumes:
+        - name: data-volume
+          emptyDir: {}
+        {{- if .Values.persistence.enabled }}
+        - name: cache-volume
+          persistentVolumeClaim:
+            claimName: {{ include "karpops-wiz.fullname" . }}-cache
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
