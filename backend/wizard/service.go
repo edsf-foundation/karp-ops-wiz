@@ -344,11 +344,8 @@ func (s *Service) HandleGetClusterCost(c *gin.Context) {
 		return
 	}
 
-	podInfo, err := s.k8sClient.GetPods(ctx)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+    // Fetch pods for potential future use (not used in current cost calc)
+    _, _ = s.k8sClient.GetPods(ctx)
 
 	// Calculate current and potential costs
 	costs := s.calculateCosts(nodeInfo)

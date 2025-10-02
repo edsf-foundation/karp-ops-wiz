@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
-import { TrendingUp, TrendingDown, DollarSign, Cpu, HardDrive, TrendingUpIcon } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { TrendingUp, DollarSign, Cpu, HardDrive, TrendingUp as TrendingUpIcon } from 'lucide-react'
 
 interface CostData {
   current: {
@@ -47,7 +47,7 @@ export function CostDashboard() {
   const [costData, setCostData] = useState<CostData | null>(null)
   const [nodeData, setNodeData] = useState<NodeData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [timeframe, setTimeframe] = useState('30d')
+  // const [timeframe, setTimeframe] = useState('30d')
 
   useEffect(() => {
     fetchDashboardData()

@@ -48,7 +48,9 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: |
+          ${{ steps.meta.outputs.tags }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -113,6 +115,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+    needs: [build-and-push]
 
     steps:
     - name: Run Trivy vulnerability scanner
