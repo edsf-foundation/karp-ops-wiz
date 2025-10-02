@@ -1,0 +1,90 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "karpops-wiz.fullname" . }}-reader
+  labels:
+    {{- include "karpops-wiz.labels" . | nindent 4 }}
+rules:
+  # Kubernetes core resources
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - pods
+      - pods/status
+      - services
+      - endpoints
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+      
+  # Events for monitoring
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - get
+      - list
+      - watch
+      
+  # Karpenter CRDs
+  {{- if .Values.features.karpenterIntegration.enabled }}
+  - apiGroups:
+      - karpenter.k8s.aws/v1beta1
+    resources:
+      - ec2nodeclasses
+      - ec2nodeclasses/status
+    verbs:
+      - get
+      - list
+      - watch
+      
+  - apiGroups:
+      - karpenter.sh/v1beta1
+    resources:
+      - nodepools
+      - nodepools/status
+    verbs:
+      - get
+      - list
+      - watch
+      {{- if or .Values.features.rebalancing.enabled .Values.features.karpenterIntegration.enabled }}
+      # For generating configs only - no actual provisioning
+      - create
+      - update
+      - patch
+      {{- end }}
+  {{- end }}
+
+  # Resource usage metrics
+  - apiGroups:
+      - metrics.k8s.io
+    resources:
+      - nodes
+      - pods
+    verbs:
+      - get
+      - list
+
+---
+{{- if .Values.serviceAccount.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "karpops-wiz.fullname" . }}-binding
+  labels:
+    {{- include "karpops-wiz.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "karpops-wiz.fullname" . }}-reader
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "karpops-wiz.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
+{{- end }}

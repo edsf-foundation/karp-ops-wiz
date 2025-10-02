@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-01T00:00:00Z",
+    "currency": "USD",
+    "region": "us-east-1"
+  },
+  "regions": {
+    "us-east-1": {
+      "code": "us-east-1",
+      "name": "US East (N. Virginia)",
+      "pricing": {
+        "t3": {
+          "micro": { "ondemand": 0.0104, "spot": 0.0031 },
+          "small": { "ondemand": 0.0208, "spot": 0.0062 },
+          "medium": { "ondemand": 0.0416, "spot": 0.0125 },
+          "large": { "ondemand": 0.0832, "spot": 0.0250 },
+          "xlarge": { "ondemand": 0.1664, "spot": 0.0499 },
+          "2xlarge": { "ondemand": 0.3328, "spot": 0.0998 }
+        },
+        "m5": {
+          "large": { "ondemand": 0.096, "spot": 0.0288 },
+          "xlarge": { "ondemand": 0.192, "spot": 0.0576 },
+          "2xlarge": { "ondemand": 0.384, "spot": 0.1152 },
+          "4xlarge": { "ondemand": 0.768, "spot": 0.2304 },
+          "8xlarge": { "ondemand": 1.536, "spot": 0.4608 },
+          "12xlarge": { "ondemand": 2.304, "spot": 0.6912 },
+          "16xlarge": { "ondemand": 3.072, "spot": 0.9216 },
+          "24xlarge": { "ondemand": 4.608, "spot": 1.3824 }
+        },
+        "c5": {
+          "large": { "ondemand": 0.085, "spot": 0.0255 },
+          "xlarge": { "ondemand": 0.170, "spot": 0.0510 },
+          "2xlarge": { "ondemand": 0.340, "spot": 0.1020 },
+          "4xlarge": { "ondemand": 0.680, "spot": 0.2040 },
+          "9xlarge": { "ondemand": 1.530, "spot": 0.4590 },
+          "12xlarge": { "ondemand": 2.040, "spot": 0.6120 },
+          "18xlarge": { "ondemand": 3.060, "spot": 0.9180 },
+          "24xlarge": { "ondemand": 4.080, "spot": 1.2240 }
+        },
+        "c6g": {
+          "large": { "ondemand": 0.0768, "spot": 0.0230 },
+          "xlarge": { "ondemand": 0.1536, "spot": 0.0461 },
+          "2xlarge": { "ondemand": 0.3072, "spot": 0.0922 },
+          "4xlarge": { "ondemand": 0.6144, "spot": 0.1843 },
+          "8xlarge": { "ondemand": 1.2288, "spot": 0.3686 },
+          "12xlarge": { "ondemand": 1.8432, "spot": 0.5530 },
+          "16xlarge": { "ondemand": 2.4576, "spot": 0.7373 },
+          "metal": { "ondemand": 2.4576, "spot": 0.7373 }
+        },
+        "m6i": {
+          "large": { "ondemand": 0.096, "spot": 0.0288 },
+          "xlarge": { "ondemand": 0.192, "spot": 0.0576 },
+          "2xlarge": { "ondemand": 0.384, "spot": 0.1152 },
+          "4xlarge": { "ondemand": 0.768, "spot": 0.2304 },
+          "8xlarge": { "ondemand": 1.536, "spot": 0.4608 },
+          "12xlarge": { "ondemand": 2.304, "spot": 0.6912 },
+          "16xlarge": { "ondemand": 3.072, "spot": 0.9216 },
+          "24xlarge": { "ondemand": 4.608, "spot": 1.3824 },
+          "32xlarge": { "ondemand": 6.144, "spot": 1.8432 }
+        },
+        "c6i": {
+          "large": { "ondemand": 0.085, "spot": 0.0255 },
+          "xlarge": { "ondemand": 0.170, "spot": 0.0510 },
+          "2xlarge": { "ondemand": 0.340, "spot": 0.1020 },
+          "4xlarge": { "ondemand": 0.680, "spot": 0.2040 },
+          "8xlarge": { "ondemand": 1.360, "spot": 0.4080 },
+          "12xlarge": { "ondemand": 2.040, "spot": 0.6120 },
+          "16xlarge": { "ondemand": 2.720, "spot": 0.8160 },
+          "24xlarge": { "ondemand": 4.080, "spot": 1.2240 },
+          "32xlarge": { "ondemand": 5.440, "spot": 1.6320 }
+        },
+        "r5": {
+          "large": { "ondemand": 0.126, "spot": 0.0378 },
+          "xlarge": { "ondemand": 0.252, "spot": 0.0756 },
+          "2xlarge": { "ondemand": 0.504, "spot": 0.1512 },
+          "4xlarge": { "ondemand": 1.008, "spot": 0.3024 },
+          "8xlarge": { "ondemand": 2.016, "spot": 0.6048 },
+          "12xlarge": { "ondemand": 3.024, "spot": 0.9072 },
+          "16xlarge": { "ondemand": 4.032, "spot": 1.2096 },
+          "24xlarge": { "ondemand": 6.048, "spot": 1.8144 }
+        },
+        "g4dn": {
+          "xlarge": { "ondemand": 0.526, "spot": 0.1578 },
+          "2xlarge": { "ondemand": 0.752, "spot": 0.2256 },
+          "4xlarge": { "ondemand": 1.204, "spot": 0.3612 },
+          "8xlarge": { "ondemand": 2.176, "spot": 0.6528 },
+          "12xlarge": { "ondemand": 3.258, "spot": 0.9774 },
+          "16xlarge": { "ondemand": 4.352, "spot": 1.3056 }
+        }
+      }
+    },
+    "us-east-2": {
+      "code": "us-east-2",
+      "name": "US East (Ohio)",
+      "pricing": {
+        "t3": {
+          "micro": { "ondemand": 0.0104, "spot": 0.0031 },
+          "small": { "ondemand": 0.0208, "spot": 0.0062 },
+          "medium": { "ondemand": 0.0416, "spot": 0.0125 },
+          "large": { "ondemand": 0.0832, "spot": 0.0250 },
+          "xlarge": { "ondemand": 0.1664, "spot": 0.0499 },
+          "2xlarge": { "ondemand": 0.3328, "spot": 0.0998 }
+        }
+      }
+    }
+  },
+  "instanceFamilies": {
+    "t3": {
+      "name": "General Purpose",
+      "description": "Burstable performance instances",
+      "architectures": ["x86_64"],
+      "recommended": ["development", "testing", "low-traffic"]
+    },
+    "m5": {
+      "name": "General Purpose",
+      "description": "Balanced compute, memory, and networking resources",
+      "architectures": ["x86_64"],
+      "recommended": ["web-apps", "databases", "general-purpose"]
+    },
+    "c5": {
+      "name": "Compute Optimized",
+      "description": "High performance processors",
+      "architectures": ["x86_64"],
+      "recommended": ["cpu-intensive", "batch-processing"]
+    },
+    "c6g": {
+      "name": "Compute Optimized (Graviton)",
+      "description": "ARM-based instances with high performance",
+      "architectures": ["arm64"],
+      "recommended": ["cost-optimized", "arm-compatible"]
+    },
+    "m6i": {
+      "name": "General Purpose (Latest)",
+      "description": "Latest generation general purpose instances",
+      "architectures": ["x86_64"],
+      "recommended": ["performance", "reliability"]
+    },
+    "r5": {
+      "name": "Memory Optimized",
+      "description": "High memory-to-compute ratio",
+      "architectures": ["x86_64"],
+      "recommended": ["memory-intensive", "databases", "analytics"]
+    },
+    "g4dn": {
+      "name": "GPU Optimized",
+      "description": "GPU-accelerated instances",
+      "architectures": ["x86_64"],
+      "recommended": ["ml-training", "gpu-compute", "graphics"]
+    }
+  }
+}

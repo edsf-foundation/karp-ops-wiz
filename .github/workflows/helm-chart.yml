@@ -1,0 +1,77 @@
+name: Helm Chart Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  chart-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: 'v3.12.0'
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Package Helm chart
+      run: |
+        helm package charts/karpops-wiz --sign --key-file <(echo "${{ secrets.HELM_KEY }}" | base64 -d)
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: KarpOps-Wiz ${{ github.ref_name }}
+        body: |
+          ## What's New
+          
+          ### Features
+          - ✅ Karpenter Config Wizard with AWS presets
+          - ✅ Cost Optimization Dashboard with charts
+          - ✅ Rebalancing Recommendations system
+          - ✅ Helm Chart with feature flags
+          - ✅ Multi-architecture Docker images
+          
+          ### Installation
+          
+          ```bash
+          # Add Helm repository
+          helm repo add karpops https://raw.githubusercontent.com/${{ github.repository }}/main/charts
+          helm repo update
+          
+          # Install with default settings
+          helm install my-karpops karpops/karpops-wiz
+          
+          # Install with custom values
+          helm install my-karpops karpops/karpops-wiz \
+            --set features.costDashboard.enabled=true \
+            --set features.rebalancing.enabled=true \
+            --set features.pricingSimulation.enabled=true
+          ```
+          
+          ### Documentation
+          See the [README](https://github.com/${{ github.repository }}) for detailed documentation and usage examples.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./karpops-wiz-${{ github.ref_name }}.tgz
+        asset_name: karpops-wiz-${{ github.ref_name }}.tgz
+        asset_content_type: application/gzip

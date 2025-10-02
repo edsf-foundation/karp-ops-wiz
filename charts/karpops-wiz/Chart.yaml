@@ -1,0 +1,19 @@
+apiVersion: v2
+name: karpops-wiz
+description: Kubernetes Cost Optimization Tool with Karpenter Integration
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - kubernetes
+  - karpenter
+  - cost-optimization
+  - aws
+  - cluster-management
+home: https://github.com/edsf-foundation/karp-ops-wiz
+sources:
+  - https://github.com/edsf-foundation/karp-ops-wiz
+maintainers:
+  - name: KarpOps-Wiz Team
+    email: team@edsf-foundation.com
+dependencies: []
